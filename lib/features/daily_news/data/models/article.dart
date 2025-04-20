@@ -1,5 +1,8 @@
 import 'package:clean_arch_demo/features/daily_news/domain/entities/article.dart';
+import 'package:floor/floor.dart';
 
+
+@Entity(tableName: 'article', primaryKeys: ['id'])
 class ArticleModel extends ArticleEntity {
   final int? id;
   final String? author;
@@ -51,5 +54,19 @@ class ArticleModel extends ArticleEntity {
     "publishedAt": publishedAt,
     "content": content,
   };
+
+
+  factory ArticleModel.fromEntity(ArticleEntity entity) {
+    return ArticleModel(
+      id: entity.id,
+      author: entity.author,
+      title: entity.title,
+      description: entity.description,
+      url: entity.url,
+      urlToImage: entity.urlToImage,
+      publishedAt: entity.publishedAt,
+      content: entity.content,
+    );
+  }
 
 }

@@ -1,3 +1,4 @@
+import 'package:clean_arch_demo/features/daily_news/domain/entities/article.dart';
 import 'package:clean_arch_demo/features/daily_news/presentation/bloc/remote/remote_article_bloc.dart';
 import 'package:clean_arch_demo/features/daily_news/presentation/bloc/remote/remote_article_state.dart';
 import 'package:clean_arch_demo/features/daily_news/presentation/widgets/article_tile.dart';
@@ -12,7 +13,7 @@ class HomePageWithDailyNews extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: _buildBody(),
+      body: _buildBody(context),
     );
   }
 
@@ -22,7 +23,7 @@ class HomePageWithDailyNews extends StatelessWidget {
     );
   }
 
-  _buildBody() {
+  _buildBody(BuildContext context) {
     return BlocBuilder<RemoteArticlesBloc,RemoteArticlesState>(
         builder: (_,state){
           if(state is RemoteArticlesLoading) {
@@ -33,21 +34,23 @@ class HomePageWithDailyNews extends StatelessWidget {
           }
           if(state is RemoteArticlesDone) {
             return ListView.builder(
-               itemCount: state.articles!.length,
+               //itemCount: state.articles!.length,
                 itemBuilder: (context,index){
-
-                 // return  ListTile(
-                 //   title: Text(index.toString()),
-                 // );
-
-                  // print("---------${state.articles![index].title}");
-                  return ArticleTileWidget(articleEntity: state.articles![index]);
-            });
+            return GestureDetector(
+                onTap: () => _onArticlePressed(context, state.articles![index]),
+                child:
+                    ArticleTileWidget(articleEntity: state.articles![index]));
+          },);
           }
           else {
             return const SizedBox.shrink();
           }
     });
+  }
+
+
+  void _onArticlePressed(BuildContext context, ArticleEntity article) {
+    Navigator.pushNamed(context, '/ArticleDetails', arguments: article);
   }
 
 }
